@@ -1,0 +1,10 @@
+# Configuration of Data Source
+driver_db=
+url_db=
+username_db=
+password_db=
+
+
+# Configuration of Hibernate (change SQL Dialect if you need)
+hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+hibernate.show_sql=true

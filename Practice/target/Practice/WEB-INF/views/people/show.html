@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show person</title>
+    <style>
+        body {
+            font-size: 24px;
+            padding: 20px
+        }
+        .btn {
+            border: 1px solid black;
+            padding: 10px;
+            background-color: orange;
+            text-decoration: none;
+            color: black;
+            font-size: 24px;
+            font-family: monospace;
+            font-weight: 500;
+        }
+        .btn:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a href="/home">Home</a>
+    <a href="/people" style="margin-left: 20px">Back</a><br>
+    <br><hr>
+
+    <p th:text="${person}"></p>
+    <p th:text="${'Email: ' + person.getEmail()}"></p>
+
+    <div style="display: flex">
+        <a th:href="@{/people/{id}/edit(id=${person.getId()})}" class="btn">Edit</a>
+        <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}"
+              style="margin-left: 20px">
+            <input type="submit" value="Delete" class="btn"/>
+        </form>
+    </div>
+
+    <br><hr><br>
+    <div th:if="${personBooks.size() > 0}">
+        <p style="font-weight: bold">Borrowed books:</p>
+        <div th:each="book : ${personBooks}">
+            <a th:href="@{/books/{id}(id=${book.getId()})}"
+               th:text="${book}"
+               th:style="${book.isExpired()} ? 'color: red' : 'color: black'"> <!-- show expired books  -->
+            </a>
+        </div>
+    </div>
+    <div th:if="${personBooks.size() == 0}">
+        <p style="font-weight: bold">This person has no books yet</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show book</title>
+    <style>
+        body {
+            font-size: 24px;
+            padding: 20px
+        }
+        .select-list {
+            padding: 10px;
+            background:#edf2ff;
+            border:none;
+            font-size: 24px;
+        }
+        .btn {
+            border: 1px solid black;
+            padding: 10px;
+            background-color: orange;
+            text-decoration: none;
+            color: black;
+            font-size: 24px;
+            font-family: monospace;
+            font-weight: 500;
+        }
+        .btn:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<a href="/home">Home</a>
+<a href="/books" style="margin-left: 20px">Back</a><br>
+<br><hr>
+
+<p th:text="${book}"></p>
+
+<div style="display: flex">
+    <a th:href="@{/books/{id}/edit(id=${book.getId()})}" class="btn">Edit</a>
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}"
+          style="margin-left: 20px">
+        <input type="submit" value="Delete" class="btn"/>
+    </form>
+</div>
+
+<br><hr><br>
+<!--someone took this book-->
+<div th:if="${bookOwner}">
+    <span>This book has been taken by: </span>
+    <a th:href="@{/people/{id}(id=${bookOwner.getId()})}"
+       th:text="${bookOwner.getFullName()}"></a>
+
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}" style="margin-top: 15px">
+        <input type="submit" value="Release book" class="btn"/>
+    </form>
+</div>
+
+<!--no one took this book-->
+<div th:if="${people}">
+    <span>This book is free. Who should be the owner?</span>
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+        <label for="person">Select a person: </label>
+        <select th:object="${person}" th:field="*{id}" id="person" class="select-list">
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getFullName()}">
+            </option>
+        </select>
+        <input type="submit" value="Assign book" class="btn"/>
+    </form>
+</div>
+</body>
+</html>
